@@ -21,7 +21,7 @@ from typing import Any
 
 import numpy as np
 
-from ..base import DetectionAdapter, TileProbabilities
+from oceantrace.detection.base import DetectionAdapter, TileProbabilities
 
 log = logging.getLogger("oceantrace.detection.onnx")
 

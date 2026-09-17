@@ -7,9 +7,9 @@ cross-environment worker execution.
 from __future__ import annotations
 
 import hashlib
-import json
+
 import logging
-import os
+
 import subprocess
 import sys
 import tempfile
@@ -18,7 +18,7 @@ from typing import Any
 
 import numpy as np
 
-from ..base import DetectionAdapter, TileProbabilities
+from oceantrace.detection.base import DetectionAdapter, TileProbabilities
 
 log = logging.getLogger("oceantrace.detection.pytorch")
 

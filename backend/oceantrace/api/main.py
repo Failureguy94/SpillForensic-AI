@@ -15,12 +15,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
-from ..core.config import get_algo_config, get_settings
-from ..core.db import db, init_db
-from ..core.jobs import get_job, list_jobs
-from ..detection.pipeline import adapter_status
-from . import service
-from .schemas import AttributeRequest, CaseCreate, CatalogFetchRequest, CatalogSearchRequest, DetectRequest, ForecastRequest, HindcastRequest, JobAccepted, LiveRecordRequest, ReviewRequest
+from oceantrace.core.config import get_algo_config, get_settings
+from oceantrace.core.db import db, init_db
+from oceantrace.core.jobs import get_job, list_jobs
+from oceantrace.detection.pipeline import adapter_status
+from oceantrace.api import service
+from oceantrace.api.schemas import AttributeRequest, CaseCreate, CatalogFetchRequest, CatalogSearchRequest, DetectRequest, ForecastRequest, HindcastRequest, JobAccepted, LiveRecordRequest, ReviewRequest
 
 logging.basicConfig(level=get_settings().log_level, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("oceantrace.api")
@@ -143,7 +143,7 @@ async def scene_upload(case_id: str, file: UploadFile = File(...), bounds: str |
 
 @app.post("/api/v1/catalog/search")
 def catalog_search(body: CatalogSearchRequest) -> dict[str, Any]:
-    from ..scenes.catalog import CatalogError, search_scenes
+    from oceantrace.scenes.catalog import CatalogError, search_scenes
 
     try:
         items = search_scenes(body.bbox, body.start, body.end, body.limit)
@@ -277,7 +277,7 @@ async def ais_import(case_id: str, file: UploadFile = File(...), source_label: s
 
 @app.delete("/api/v1/cases/{case_id}/ais/{import_id}", status_code=204)
 def ais_delete(case_id: str, import_id: str) -> Response:
-    from ..ais.importer import delete_import
+    from oceantrace.ais.importer import delete_import
 
     delete_import(case_id, import_id)
     return Response(status_code=204)
@@ -343,7 +343,7 @@ def audit_log(case_id: str) -> list[dict[str, Any]]:
 
 @app.get("/api/v1/cases/{case_id}/report.html")
 def report_html(case_id: str) -> Response:
-    from ..reporting.report import render_report
+    from oceantrace.reporting.report import render_report
 
     try:
         html = render_report(service.export_case(case_id, "json"))
@@ -354,7 +354,7 @@ def report_html(case_id: str) -> Response:
 
 @app.get("/api/v1/vessels/search")
 def vessel_search(query: str = Query(..., description="Vessel name, MMSI, or IMO")) -> dict[str, Any]:
-    from ..ais.gfw import search_vessel_gfw
+    from oceantrace.ais.gfw import search_vessel_gfw
     results = search_vessel_gfw(query)
     return {"query": query, "count": len(results), "results": results}
 

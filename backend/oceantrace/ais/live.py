@@ -14,8 +14,8 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, Callable
 
-from ..core.config import get_settings
-from ..core.db import db, dumps, utcnow
+from oceantrace.core.config import get_settings
+from oceantrace.core.db import db, dumps, utcnow
 
 log = logging.getLogger("oceantrace.ais.live")
 

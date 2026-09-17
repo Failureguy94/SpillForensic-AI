@@ -4,6 +4,7 @@
 __pycache__/
 *.pyc
 .venv/
+.venv_broken/
 .pytest_cache/
 # node
 apps/web/node_modules/

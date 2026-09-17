@@ -10,8 +10,8 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Callable
 
-from .config import get_settings
-from .db import db, dumps, loads, row_to_dict, utcnow
+from oceantrace.core.config import get_settings
+from oceantrace.core.db import db, dumps, loads, row_to_dict, utcnow
 
 log = logging.getLogger("oceantrace.jobs")
 

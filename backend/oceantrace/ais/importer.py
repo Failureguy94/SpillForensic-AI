@@ -16,7 +16,7 @@ from typing import Any, Iterable
 import numpy as np
 import pandas as pd
 
-from ..core.db import db, dumps, utcnow
+from oceantrace.core.db import db, dumps, utcnow
 
 log = logging.getLogger("oceantrace.ais")
 

@@ -18,12 +18,12 @@ from rasterio.transform import Affine
 from shapely.geometry import shape
 from shapely.ops import unary_union
 
-from ..core.config import get_algo_config, get_settings, resolve_path
-from ..geo.utils import buffer_km, geom_to_geojson, shape_metrics, to_local, to_wgs84
-from .base import DetectionAdapter
-from .adapters.classical import ClassicalDarkSpotAdapter
-from .adapters.onnx_adapter import ModelNotAvailable, OnnxSegmentationAdapter
-from .adapters.pytorch_adapter import PyTorchModelNotAvailable, PyTorchSegmentationAdapter
+from oceantrace.core.config import get_algo_config, get_settings, resolve_path
+from oceantrace.geo.utils import buffer_km, geom_to_geojson, shape_metrics, to_local, to_wgs84
+from oceantrace.detection.base import DetectionAdapter
+from oceantrace.detection.adapters.classical import ClassicalDarkSpotAdapter
+from oceantrace.detection.adapters.onnx_adapter import ModelNotAvailable, OnnxSegmentationAdapter
+from oceantrace.detection.adapters.pytorch_adapter import PyTorchModelNotAvailable, PyTorchSegmentationAdapter
 
 log = logging.getLogger("oceantrace.detection")
 
@@ -209,7 +209,7 @@ def run_detection(
 
     land_checker = None
     if use_land_mask:
-        from ..geo import landmask
+        from oceantrace.geo import landmask
 
         if landmask.available():
             land_checker = lambda lon, lat: bool(landmask.is_land(lon, lat))  # noqa: E731
@@ -218,7 +218,7 @@ def run_detection(
         """Distance (km, capped at 50) from the polygon centroid to the nearest coastline (Natural Earth 10 m)."""
         if not land_checker:
             return None
-        from ..geo import landmask
+        from oceantrace.geo import landmask
 
         c = g.centroid
         return landmask.distance_to_land_km(float(c.x), float(c.y), max_km=50.0)

@@ -6,7 +6,7 @@ from typing import Any
 
 import httpx
 
-from ..core.config import get_settings
+from oceantrace.core.config import get_settings
 
 log = logging.getLogger("oceantrace.ais.gfw")
 GFW_GATEWAY_URL = "https://gateway.api.globalfishingwatch.org/v3"

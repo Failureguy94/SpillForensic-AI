@@ -12,16 +12,16 @@ from typing import Any
 import numpy as np
 from shapely.geometry import shape
 
-from ..ais.importer import import_ais_csv, list_imports
-from ..attribution.scoring import attribute, persist_attribution
-from ..core.config import get_algo_config, get_settings
-from ..core.db import audit, db, dumps, loads, row_to_dict, utcnow
-from ..core.jobs import JobContext, submit
-from ..detection.pipeline import adapter_status, run_detection
-from ..environment.fields import EnvField, EnvironmentUnavailable, build_provider
-from ..geo.utils import geodesic_area_km2, shape_metrics
-from ..scenes.ingest import SceneValidationError, ingest_scene
-from ..trajectory.lagrangian import analyse, forecast_summary, integrate, validate_params
+from oceantrace.ais.importer import import_ais_csv, list_imports
+from oceantrace.attribution.scoring import attribute, persist_attribution
+from oceantrace.core.config import get_algo_config, get_settings
+from oceantrace.core.db import audit, db, dumps, loads, row_to_dict, utcnow
+from oceantrace.core.jobs import JobContext, submit
+from oceantrace.detection.pipeline import adapter_status, run_detection
+from oceantrace.environment.fields import EnvField, EnvironmentUnavailable, build_provider
+from oceantrace.geo.utils import geodesic_area_km2, shape_metrics
+from oceantrace.scenes.ingest import SceneValidationError, ingest_scene
+from oceantrace.trajectory.lagrangian import analyse, forecast_summary, integrate, validate_params
 
 log = logging.getLogger("oceantrace.service")
 
@@ -264,7 +264,7 @@ def ingest_scene_job(case_id: str, upload_path: Path, original_name: str, manual
         meta["original_filename"] = original_name
         if meta.get("sensor") == "unknown":
             t, src = None, None
-            from ..scenes.ingest import parse_time_from_name
+            from oceantrace.scenes.ingest import parse_time_from_name
             t, src = parse_time_from_name(original_name)
             if src == "sentinel1_filename":
                 meta["sensor"] = "Sentinel-1"
@@ -301,7 +301,7 @@ def _detect(case_id: str, scene_id: str, scene_dir: Path, overrides: dict[str, A
 
 def catalog_fetch_job(case_id: str, item_id: str, bbox: list[float], polarization: str, run_detect: bool, detect_overrides: dict[str, Any] | None) -> str:
     """Pull a real Sentinel-1 GRD subset from the Planetary Computer catalog and ingest it."""
-    from ..scenes.catalog import fetch_subset
+    from oceantrace.scenes.catalog import fetch_subset
 
     get_case(case_id)
     cfg = get_algo_config()
@@ -484,7 +484,7 @@ def ais_import_job(case_id: str, path: Path, filename: str, source_label: str, d
 
 
 def ais_live_record_job(case_id: str, bbox: list[float], minutes: float) -> str:
-    from ..ais.live import record_aisstream
+    from oceantrace.ais.live import record_aisstream
 
     get_case(case_id)
 
@@ -504,7 +504,7 @@ def ais_generate_synthetic_job(case_id: str) -> str:
         raise ValueError("Run a hindcast first before generating corridor AIS traffic")
 
     def _job(ctx: JobContext) -> dict[str, Any]:
-        from ..ais.synth import make_synthetic_ais_csv
+        from oceantrace.ais.synth import make_synthetic_ais_csv
         ctx.progress(0.1, "synthesizing AIS corridor traffic matching release window")
         c = shape(hc["origin_geometry"]).centroid
         origin = [c.x, c.y]

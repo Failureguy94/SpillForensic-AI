@@ -16,8 +16,8 @@ import numpy as np
 from shapely import contains_xy
 from shapely.geometry import shape
 
-from ..core.db import db
-from ..geo.utils import angular_diff_deg, bearing_deg, buffer_km, haversine_km, haversine_km_vec
+from oceantrace.core.db import db
+from oceantrace.geo.utils import angular_diff_deg, bearing_deg, buffer_km, haversine_km, haversine_km_vec
 
 PRIORITY_LABELS = {"high": "High investigation priority", "medium": "Medium investigation priority", "low": "Low investigation priority", "insufficient": "Insufficient correlation"}
 
@@ -336,7 +336,7 @@ def attribute(case_id: str, hindcast: dict[str, Any], slick_centroid: list[float
 
     # Enrich top scored candidates with Global Fishing Watch registry identity
     try:
-        from ..ais.gfw import enrich_vessel_details
+        from oceantrace.ais.gfw import enrich_vessel_details
         for r in results[:10]:
             gfw_meta = enrich_vessel_details(r["mmsi"], r["vessel"].get("name"))
             if gfw_meta:
@@ -373,7 +373,7 @@ def _ais_data_modes(case_id: str) -> list[str]:
 
 
 def persist_attribution(case_id: str, hindcast_run_id: str, result: dict[str, Any]) -> str:
-    from ..core.db import dumps, utcnow
+    from oceantrace.core.db import dumps, utcnow
 
     run_id = f"attr_{uuid.uuid4().hex[:10]}"
     with db() as conn:

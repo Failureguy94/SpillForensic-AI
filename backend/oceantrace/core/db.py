@@ -9,7 +9,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from typing import Any, Iterator
 
-from .config import get_settings
+from oceantrace.core.config import get_settings
 
 _lock = threading.RLock()
 

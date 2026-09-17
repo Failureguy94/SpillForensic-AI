@@ -28,7 +28,7 @@ import warnings
 import numpy as np
 from scipy import ndimage as ndi
 
-from ..base import DetectionAdapter, TileProbabilities
+from oceantrace.detection.base import DetectionAdapter, TileProbabilities
 
 
 def to_db(tile: np.ndarray) -> np.ndarray:
